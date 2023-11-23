@@ -5,6 +5,7 @@ import { cookies } from "next/headers";
 import { TRPCReactProvider } from "~/trpc/react";
 import { ThemeProvider } from "./_components/theme-provider";
 import { inter } from "./lib/fonts";
+import { NextAuthProvider } from "./_components/auth-providert";
 
 export const metadata = {
   title: "Create T3 App",
@@ -20,16 +21,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`font-sans ${inter.variable}`}>
-        <TRPCReactProvider cookies={cookies().toString()}>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-          </ThemeProvider>
-        </TRPCReactProvider>
+        <NextAuthProvider>
+          <TRPCReactProvider cookies={cookies().toString()}>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              {children}
+            </ThemeProvider>
+          </TRPCReactProvider>
+        </NextAuthProvider>
       </body>
     </html>
   );
