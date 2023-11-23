@@ -60,7 +60,7 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
-    Posts         Posts[]
+    Posts         Post[]
     Likes         Likes[]
     Comment       Comment[]
 }
@@ -73,7 +73,7 @@ model VerificationToken {
     @@unique([identifier, token])
 }
 
-model Posts {
+model Post {
     id      Int    @id @default(autoincrement())
     name    String
     title   String
@@ -92,7 +92,7 @@ model Posts {
 
 model Tags {
     postId Int    @id
-    post   Posts  @relation(fields: [postId], references: [id], onDelete: Cascade)
+    post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
     tag    String
 
     @@index([postId])
