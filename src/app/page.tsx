@@ -1,6 +1,5 @@
 import Link from "next/link";
 
-import { CreatePost } from "~/app/_components/create-post";
 import { api } from "~/trpc/server";
 import UserWizard from "./_components/user-wizard";
 
@@ -59,8 +58,6 @@ async function CrudShowcase() {
       ) : (
         <p>You have no posts yet.</p>
       )}
-
-      <CreatePost />
     </div>
   );
 }
