@@ -6,6 +6,8 @@ import { TRPCReactProvider } from "~/trpc/react";
 import { ThemeProvider } from "./_components/theme-provider";
 import { inter } from "./lib/fonts";
 import { NextAuthProvider } from "./_components/auth-providert";
+import Header from "./_components/header";
+import { cn } from "./lib/utils";
 
 export const metadata = {
   title: "Create T3 App",
@@ -20,7 +22,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`font-sans ${inter.variable}`}>
+      <body className={cn("relative font-sans antialiased", inter.className)}>
         <NextAuthProvider>
           <TRPCReactProvider cookies={cookies().toString()}>
             <ThemeProvider
@@ -29,7 +31,10 @@ export default function RootLayout({
               enableSystem
               disableTransitionOnChange
             >
-              {children}
+              <Header />
+              <main className="relative max-w-6xl md:grid-cols-2">
+                {children}
+              </main>
             </ThemeProvider>
           </TRPCReactProvider>
         </NextAuthProvider>
