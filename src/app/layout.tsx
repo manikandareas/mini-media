@@ -1,13 +1,12 @@
 import "~/styles/globals.css";
-
 import { cookies } from "next/headers";
-
 import { TRPCReactProvider } from "~/trpc/react";
 import { ThemeProvider } from "./_components/theme-provider";
 import { inter } from "./lib/fonts";
-import { NextAuthProvider } from "./_components/auth-providert";
+import { NextAuthProvider } from "./_components/auth-provider";
 import Header from "./_components/header";
 import { cn } from "./lib/utils";
+import FeedAside from "./_components/feed/feed-aside";
 
 export const metadata = {
   title: "Create T3 App",
@@ -32,8 +31,9 @@ export default function RootLayout({
               disableTransitionOnChange
             >
               <Header />
-              <main className="relative max-w-6xl md:grid-cols-2">
+              <main className="relative mx-auto flex max-w-6xl justify-center ">
                 {children}
+                <FeedAside />
               </main>
             </ThemeProvider>
           </TRPCReactProvider>

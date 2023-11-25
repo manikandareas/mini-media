@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import {
   Avatar,
@@ -36,12 +37,18 @@ import {
   DropdownMenuTrigger,
 } from "~/app/_components/ui/dropdown-menu";
 import { ModeToggle } from "./mode-toggle";
+import { signOut } from "next-auth/react";
 
 export default function DropdownAvatar() {
+  const handlerSignout = async () => {
+    await signOut({
+      callbackUrl: "/",
+    });
+  };
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Avatar className="h-auto w-8 hover:cursor-pointer">
+        <Avatar className="h-8 w-8 hover:cursor-pointer md:h-10 md:w-10">
           <AvatarImage src="https://github.com/shadcn.png" />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
@@ -125,7 +132,7 @@ export default function DropdownAvatar() {
           <span>API</span>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={handlerSignout}>
           <LogOut className="mr-2 h-4 w-4" />
           <span>Log out</span>
           <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
