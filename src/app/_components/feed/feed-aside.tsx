@@ -23,19 +23,19 @@ export default function FeedAside({}: Props) {
           <h1 className="text-xl font-bold">Trends for you</h1>
         </div>
 
-        <div className="flex flex-col gap-y-3">
+        <div className="flex flex-col ">
           {Array(8)
             .fill(0)
             .map((_, idx) => (
               <div
-                className="flex cursor-pointer items-center justify-between px-4 py-2 hover:bg-secondary"
+                className="flex cursor-pointer items-center justify-between px-4 py-3 hover:bg-secondary"
                 key={idx}
               >
                 <div className="flex flex-col">
                   <small className="text-muted-foreground">
                     Trending in Indonesia
                   </small>
-                  <strong>#GISELLE</strong>
+                  <strong className="text-sm">#GISELLE</strong>
                   <small className="text-muted-foreground">37.7k posts</small>
                 </div>
 
