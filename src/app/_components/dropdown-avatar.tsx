@@ -37,9 +37,10 @@ import {
   DropdownMenuTrigger,
 } from "~/app/_components/ui/dropdown-menu";
 import { ModeToggle } from "./mode-toggle";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 export default function DropdownAvatar() {
+  const { data } = useSession();
   const handlerSignout = async () => {
     await signOut({
       callbackUrl: "/",
@@ -49,14 +50,16 @@ export default function DropdownAvatar() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Avatar className="h-8 w-8 hover:cursor-pointer md:h-10 md:w-10">
-          <AvatarImage src="https://github.com/shadcn.png" />
-          <AvatarFallback>CN</AvatarFallback>
+          <AvatarImage
+            src={data?.user.image ?? "https://github.com/shadcn.png"}
+          />
+          <AvatarFallback>{data?.user.name ?? "CN"}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
         <DropdownMenuLabel>
           <div className="flex w-full items-center justify-between">
-            <span>My Account</span>
+            <span className="w-36">{data?.user.name ?? "My Account"}</span>
             <ModeToggle />
           </div>
         </DropdownMenuLabel>

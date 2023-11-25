@@ -6,7 +6,7 @@ import { inter } from "./lib/fonts";
 import { NextAuthProvider } from "./_components/auth-provider";
 import Header from "./_components/header";
 import { cn } from "./lib/utils";
-import FeedAside from "./_components/feed/feed-aside";
+import { Toaster } from "react-hot-toast";
 
 export const metadata = {
   title: "Create T3 App",
@@ -33,8 +33,8 @@ export default function RootLayout({
               <Header />
               <main className="relative mx-auto flex max-w-6xl justify-center ">
                 {children}
-                <FeedAside />
               </main>
+              <Toaster />
             </ThemeProvider>
           </TRPCReactProvider>
         </NextAuthProvider>

@@ -8,7 +8,7 @@ import { MoreHorizontal } from "lucide-react";
 
 export default function Post() {
   return (
-    <article className="flex h-fit max-w-[37.5rem] flex-col gap-4  border p-4">
+    <article className="flex h-fit flex-col gap-4  border p-4">
       <header className="flex w-full items-center justify-between">
         <div className="flex items-center gap-2">
           <Avatar className="h-8 w-8 hover:cursor-pointer md:h-10 md:w-10">
