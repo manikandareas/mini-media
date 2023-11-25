@@ -3,7 +3,14 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import dynamic from "next/dynamic";
 
+const Picker = dynamic(
+  () => {
+    return import("emoji-picker-react");
+  },
+  { ssr: false },
+);
 import {
   Form,
   FormControl,
@@ -24,6 +31,10 @@ import {
 import { Textarea } from "./ui/textarea";
 
 import { toast } from "react-hot-toast";
+import { Image, Smile } from "lucide-react";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
+import { useState } from "react";
 
 const FormSchema = z.object({
   content: z
@@ -41,6 +52,8 @@ export function ModalCreate() {
     resolver: zodResolver(FormSchema),
   });
 
+  const [emojiToggle, setEmojiToggle] = useState<boolean>(false);
+
   function onSubmit(data: z.infer<typeof FormSchema>) {
     console.log(data.content);
     toast.success("Successfully toasted!", {
@@ -57,7 +70,7 @@ export function ModalCreate() {
           Create
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-2xl">
+      <DialogContent className="top-[30%] sm:max-w-2xl">
         <DialogHeader>
           <DialogTitle>Create post</DialogTitle>
           <DialogDescription>
@@ -87,8 +100,24 @@ export function ModalCreate() {
                 </FormItem>
               )}
             />
+            <div className="flex gap-4">
+              <div>
+                <Label htmlFor="picture">
+                  {/* eslint-disable-next-line */}
+                  <Image />
+                </Label>
+                <Input id="picture" type="file" className="sr-only" />
+              </div>
+              <div className="relative">
+                <Smile onClick={() => setEmojiToggle(!emojiToggle)} />
+
+                <div className="absolute">
+                  {emojiToggle ? <Picker /> : null}
+                </div>
+              </div>
+            </div>
             <div className="flex items-center justify-end gap-x-2">
-              <Button variant="outline" type="submit">
+              <Button variant="ghost" type="submit">
                 Archive
               </Button>
               <Button type="submit">Publish</Button>
