@@ -2,8 +2,6 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
-
 import {
   Form,
   FormControl,
@@ -22,57 +20,71 @@ import {
   DialogTrigger,
 } from "~/app/_components/ui/dialog";
 import { Textarea } from "./ui/textarea";
-
 import { toast } from "react-hot-toast";
 import { Cat, Image as ImageIcon, ScanSearch, X } from "lucide-react";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { type ChangeEvent, useEffect, useState } from "react";
 import Image from "next/image";
-import { cn } from "../lib/utils";
+import { cn, manualDialogClose } from "../lib/utils";
 import { api } from "~/trpc/react";
-
-const FormSchema = z.object({
-  content: z
-    .string()
-    .min(2, {
-      message: "Content must be at least 2 characters.",
-    })
-    .max(160, {
-      message: "Bio must not be longer than 30 characters.",
-    }),
-});
+import { useUploadThing } from "../lib/uploadthing";
+import { FormUploadPostSchema } from "../lib/validators";
+import type { z } from "zod";
 
 export function ModalCreate() {
-  const { mutate, isLoading } = api.post.create.useMutation({
+  const [inputMedia, setInputMedia] = useState<(Blob | MediaSource)[]>([]);
+  const [mediaURLs, setMediaURLs] = useState<string[]>([]);
+
+  const { mutateAsync, isLoading } = api.post.create.useMutation({
     onSuccess: () => {
       toast.success("Successfully create post!", {
         position: "bottom-right",
+        duration: 5000,
       });
 
+      manualDialogClose();
+      setInputMedia([]);
       form.resetField("content");
       form.setValue("content", "");
     },
   });
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+  const form = useForm<z.infer<typeof FormUploadPostSchema>>({
+    resolver: zodResolver(FormUploadPostSchema),
   });
 
-  const [inputMedia, setInputMedia] = useState<(Blob | MediaSource)[]>([]);
-  const [mediaURLs, setMediaURLs] = useState<string[]>([]);
+  const { startUpload, isUploading: isImageUploading } =
+    useUploadThing("imageUploader");
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    mutate({
-      content: data.content,
-    });
+  async function onSubmit(data: z.infer<typeof FormUploadPostSchema>) {
+    try {
+      const media = inputMedia
+        ? await startUpload(inputMedia as File[]).then((res) => {
+            const formattedMedia = res?.map((image) => ({
+              id: image.name,
+              url: image.url,
+            }));
+            return formattedMedia ?? [];
+          })
+        : [];
+
+      await mutateAsync({
+        content: data.content,
+        media,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   const handlerInputMediaChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files;
+    console.log({ formdata: e.target.files });
+    console.log({ inputMedia });
     if (file === null) {
       setInputMedia([]);
     } else {
-      setInputMedia((prevState) => [...prevState, file[0]] as Blob[]);
+      setInputMedia((prevState) => [...prevState, ...file] as Blob[]);
     }
   };
 
@@ -198,7 +210,7 @@ export function ModalCreate() {
               <Button variant="ghost" type="submit">
                 Archive
               </Button>
-              <Button type="submit" disabled={isLoading}>
+              <Button type="submit" disabled={isLoading || isImageUploading}>
                 Publish
               </Button>
             </div>

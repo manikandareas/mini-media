@@ -1,5 +1,5 @@
 import { z } from "zod";
-
+import { imageSchema } from "~/app/lib/validators";
 import {
   createTRPCRouter,
   privateProcedure,
@@ -7,16 +7,13 @@ import {
 } from "~/server/api/trpc";
 
 export const postRouter = createTRPCRouter({
-  hello: publicProcedure
-    .input(z.object({ text: z.string() }))
-    .query(({ input }) => {
-      return {
-        greeting: `Hello ${input.text}`,
-      };
-    }),
-  getLatest: publicProcedure.query(({ ctx }) => {
-    return ctx.db.post.findFirst({
+  getAll: publicProcedure.query(({ ctx }) => {
+    return ctx.db.post.findMany({
       orderBy: { createdAt: "desc" },
+      include: {
+        author: true,
+        images: true,
+      },
     });
   }),
 
@@ -29,16 +26,40 @@ export const postRouter = createTRPCRouter({
             message: "Content must be at least 2 characters.",
           })
           .max(160, {
-            message: "Bio must not be longer than 30 characters.",
+            message: "Text must not be longer than 30 characters.",
           }),
+        media: z.array(imageSchema).max(4),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.post.create({
+      const createdPost = await ctx.db.post.create({
         data: {
           content: input.content,
           authorId: ctx.session.user.id,
         },
       });
+
+      if (!input.media) {
+        return {
+          post: createdPost,
+          media: null,
+        };
+      }
+
+      const formattedMedia = input.media.map((media) => {
+        return {
+          url: media.url,
+          postId: createdPost.id,
+        };
+      });
+
+      const uploadedMedia = await ctx.db.images.createMany({
+        data: formattedMedia,
+      });
+
+      return {
+        post: createdPost,
+        media: uploadedMedia,
+      };
     }),
 });

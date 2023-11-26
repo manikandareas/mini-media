@@ -1,16 +1,25 @@
+import { api } from "~/trpc/server";
 import Feed from "./_components/feed/feed";
 import FeedAside from "./_components/feed/feed-aside";
 import Post from "./_components/feed/post";
 
-export default function Home() {
+export default async function Home() {
+  const data = await api.post.getAll.query();
   return (
     <>
       <Feed>
-        {Array(10)
-          .fill(0)
-          .map((_, idx) => (
-            <Post key={idx} />
-          ))}
+        {data ? (
+          data.map((post) => (
+            <Post
+              key={post.id}
+              images={post.images}
+              post={post}
+              user={post.author}
+            />
+          ))
+        ) : (
+          <h1>No data</h1>
+        )}
       </Feed>
       <FeedAside />
     </>

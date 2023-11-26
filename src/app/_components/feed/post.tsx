@@ -3,33 +3,50 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { getFeedActionColor } from "~/app/helpers/getFeedActionColor";
 import { postFooterAction } from "~/app/lib/data";
 import { MoreHorizontal } from "lucide-react";
+import Image from "next/image";
+import type { Images, Post, User } from "@prisma/client";
 
-// type Props = {};
+type Props = {
+  user: User;
+  post: Post;
+  images: Images[];
+};
 
-export default function Post() {
+export default function Post({ images, post, user }: Props) {
   return (
     <article className="flex h-fit flex-col gap-4  border p-4">
       <header className="flex w-full items-center justify-between">
         <div className="flex items-center gap-2">
           <Avatar className="h-8 w-8 hover:cursor-pointer md:h-10 md:w-10">
-            <AvatarImage src="https://github.com/shadcn.png" />
+            <AvatarImage src={user.image ?? "https://github.com/shadcn.png"} />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
 
           <div className="leading-5">
-            <h1>Simon Fairhurst</h1>
-            <small className="text-muted-foreground">@simonfairhurst</small>
+            <h1>{user.name}</h1>
+            <small className="text-muted-foreground">@{user.name}</small>
           </div>
         </div>
         <i className="flex cursor-pointer items-center justify-center rounded-full p-1 hover:bg-primary-foreground">
           <MoreHorizontal />
         </i>
       </header>
-      <main>
-        <p className="text-lg text-primary">
-          Figma, Webflow, or Framer. Which one will take the lead in 2023 and be
-          the goto for digital design?
-        </p>
+      <main className="space-y-2">
+        <p className="text-lg text-primary">{post.content}</p>
+        {images ? (
+          <figure className="flex flex-wrap">
+            {images.map((img) => (
+              <Image
+                key={img.id}
+                src={img.url}
+                alt="image"
+                className="max-h-[20rem] grow object-cover"
+                width={200}
+                height={200}
+              />
+            ))}
+          </figure>
+        ) : null}
       </main>
       <footer>
         <ul className="flex w-full items-center gap-4">

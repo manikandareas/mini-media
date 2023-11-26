@@ -74,11 +74,12 @@ model VerificationToken {
 }
 
 model Post {
-    id      Int    @id @default(autoincrement())
-    content String
-
+    id       Int    @id @default(autoincrement())
+    content  String @db.Text
     authorId String
     author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+    images Images[]
 
     Tag Tags[]
 
@@ -86,6 +87,15 @@ model Post {
     updatedAt DateTime @updatedAt
 
     @@index([authorId])
+}
+
+model Images {
+    id     Int    @id @default(autoincrement())
+    url    String
+    postId Int
+    post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+    @@index([postId])
 }
 
 model Tags {
