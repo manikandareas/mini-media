@@ -3,14 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import dynamic from "next/dynamic";
 
-const Picker = dynamic(
-  () => {
-    return import("emoji-picker-react");
-  },
-  { ssr: false },
-);
 import {
   Form,
   FormControl,
@@ -31,10 +24,13 @@ import {
 import { Textarea } from "./ui/textarea";
 
 import { toast } from "react-hot-toast";
-import { Image, Smile } from "lucide-react";
+import { Cat, Image as ImageIcon, ScanSearch, X } from "lucide-react";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
-import { useState } from "react";
+import { type ChangeEvent, useEffect, useState } from "react";
+import Image from "next/image";
+import { cn } from "../lib/utils";
+import { api } from "~/trpc/react";
 
 const FormSchema = z.object({
   content: z
@@ -48,21 +44,57 @@ const FormSchema = z.object({
 });
 
 export function ModalCreate() {
+  const { mutate, isLoading } = api.post.create.useMutation({
+    onSuccess: () => {
+      toast.success("Successfully create post!", {
+        position: "bottom-right",
+      });
+
+      form.resetField("content");
+      form.setValue("content", "");
+    },
+  });
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
 
-  const [emojiToggle, setEmojiToggle] = useState<boolean>(false);
+  const [inputMedia, setInputMedia] = useState<(Blob | MediaSource)[]>([]);
+  const [mediaURLs, setMediaURLs] = useState<string[]>([]);
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log(data.content);
-    toast.success("Successfully toasted!", {
-      position: "bottom-right",
+    mutate({
+      content: data.content,
     });
-
-    form.resetField("content");
-    form.setValue("content", "");
   }
+
+  const handlerInputMediaChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files;
+    if (file === null) {
+      setInputMedia([]);
+    } else {
+      setInputMedia((prevState) => [...prevState, file[0]] as Blob[]);
+    }
+  };
+
+  const handlerRemoveMedia = (idx: number) => {
+    const newInputMedia = inputMedia.filter((_, id, __) => id !== idx);
+    setInputMedia(newInputMedia);
+  };
+
+  useEffect(() => {
+    if (inputMedia.length > 0) {
+      const newMediaURLs: string[] = [];
+      inputMedia.forEach((media) =>
+        newMediaURLs.push(URL.createObjectURL(media)),
+      );
+      setMediaURLs(newMediaURLs);
+    }
+
+    return () => {
+      setMediaURLs([]);
+    };
+  }, [inputMedia, setInputMedia]);
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -70,12 +102,11 @@ export function ModalCreate() {
           Create
         </Button>
       </DialogTrigger>
-      <DialogContent className="top-[30%] sm:max-w-2xl">
+      <DialogContent className="max-h-[80%] overflow-y-scroll sm:max-w-2xl">
         <DialogHeader>
           <DialogTitle>Create post</DialogTitle>
           <DialogDescription>
-            Make changes to your profile here. Click save when you`&apos;`re
-            done.
+            Make changes to your profile here. Click save when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -88,11 +119,11 @@ export function ModalCreate() {
               name="content"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Bio</FormLabel>
+                  <FormLabel>Text</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Tell us a little bit about yourself"
-                      className="resize-none"
+                      placeholder="What is happening?!"
+                      className="h-fit resize-none placeholder:text-xl"
                       {...field}
                     />
                   </FormControl>
@@ -100,27 +131,76 @@ export function ModalCreate() {
                 </FormItem>
               )}
             />
-            <div className="flex gap-4">
-              <div>
-                <Label htmlFor="picture">
-                  {/* eslint-disable-next-line */}
-                  <Image />
-                </Label>
-                <Input id="picture" type="file" className="sr-only" />
-              </div>
-              <div className="relative">
-                <Smile onClick={() => setEmojiToggle(!emojiToggle)} />
+            {mediaURLs.length > 0 ? (
+              <figure className="flex flex-wrap">
+                {mediaURLs.map((url, idx) => (
+                  <div className="relative flex grow" key={idx}>
+                    <button
+                      type="button"
+                      onClick={() => handlerRemoveMedia(idx)}
+                      className="bg-black/50s rounded-full p-1 "
+                    >
+                      <X size={18} className="absolute right-1 top-1" />
+                    </button>
+                    <Image
+                      src={url}
+                      alt={url}
+                      width={200}
+                      height={200}
+                      className="grow rounded-md"
+                    />
+                  </div>
+                ))}
+              </figure>
+            ) : null}
 
-                <div className="absolute">
-                  {emojiToggle ? <Picker /> : null}
-                </div>
+            <div className="flex items-center gap-2">
+              <div
+                title="Media"
+                className="group cursor-pointer rounded-full p-1.5 text-blue-600 hover:bg-blue-600/10"
+              >
+                <Label
+                  htmlFor="picture"
+                  className="group-hover:cursor-pointer"
+                  aria-disabled={inputMedia.length === 4}
+                >
+                  <ImageIcon
+                    size={18}
+                    className={cn({
+                      "text-slate-500": inputMedia.length === 4,
+                    })}
+                  />
+                </Label>
+                <Input
+                  id="picture"
+                  type="file"
+                  multiple
+                  className="sr-only"
+                  accept="image/*"
+                  onChange={handlerInputMediaChange}
+                  disabled={inputMedia.length === 4}
+                />
+              </div>
+              <div
+                title="Unsplash"
+                className="cursor-pointer rounded-full p-1.5 text-blue-600 hover:bg-blue-600/10"
+              >
+                <ScanSearch size={18} />
+              </div>
+              <div
+                title="Gif"
+                className="cursor-pointer rounded-full p-1.5 text-blue-600 hover:bg-blue-600/10"
+              >
+                <Cat size={18} />
               </div>
             </div>
             <div className="flex items-center justify-end gap-x-2">
               <Button variant="ghost" type="submit">
                 Archive
               </Button>
-              <Button type="submit">Publish</Button>
+              <Button type="submit" disabled={isLoading}>
+                Publish
+              </Button>
             </div>
           </form>
         </Form>

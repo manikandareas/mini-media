@@ -1,6 +1,10 @@
 import { z } from "zod";
 
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import {
+  createTRPCRouter,
+  privateProcedure,
+  publicProcedure,
+} from "~/server/api/trpc";
 
 export const postRouter = createTRPCRouter({
   hello: publicProcedure
@@ -15,4 +19,26 @@ export const postRouter = createTRPCRouter({
       orderBy: { createdAt: "desc" },
     });
   }),
+
+  create: privateProcedure
+    .input(
+      z.object({
+        content: z
+          .string()
+          .min(2, {
+            message: "Content must be at least 2 characters.",
+          })
+          .max(160, {
+            message: "Bio must not be longer than 30 characters.",
+          }),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.post.create({
+        data: {
+          content: input.content,
+          authorId: ctx.session.user.id,
+        },
+      });
+    }),
 });

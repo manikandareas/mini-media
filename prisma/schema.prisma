@@ -75,8 +75,6 @@ model VerificationToken {
 
 model Post {
     id      Int    @id @default(autoincrement())
-    name    String
-    title   String
     content String
 
     authorId String
