@@ -1,19 +1,17 @@
-import { api } from "~/trpc/server";
+"use client";
+import { api } from "~/trpc/react";
 import Post from "~/app/_components/feed/post";
-import type { RouterOutputs } from "~/trpc/shared";
 
-type PostsResponse = RouterOutputs["post"]["getAll"];
+export default function Feed() {
+  const { data, isLoading } = api.post.getAll.useQuery();
 
-export default async function Feed() {
-  const data: PostsResponse = await api.post.getAll.query();
-
-  if (!data) {
-    return <h1>Data not found</h1>;
+  if (isLoading) {
+    return <h1>Loading...</h1>;
   }
 
   return (
     <main className="flex min-h-screen w-full max-w-[37.5rem] flex-col">
-      {data.length !== 0 ? (
+      {data ? (
         data.map((post) => (
           <Post
             key={post.post.id}
