@@ -1,4 +1,3 @@
-import { Suspense } from "react";
 import Feed from "./_components/feed/feed";
 import FeedAside from "./_components/feed/feed-aside";
 
