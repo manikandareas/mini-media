@@ -3,8 +3,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { getFeedActionColor } from "~/app/helpers/getFeedActionColor";
 import { postFooterAction } from "~/app/lib/data";
 import { MoreHorizontal } from "lucide-react";
-import Image from "next/image";
 import type { Images, Post, User } from "@prisma/client";
+import PostImage from "./post-image";
 
 type Props = {
   user: User;
@@ -33,20 +33,7 @@ export default function Post({ images, post, user }: Props) {
       </header>
       <main className="space-y-2">
         <p className="text-lg text-primary">{post.content}</p>
-        {images ? (
-          <figure className="flex flex-wrap">
-            {images.map((img) => (
-              <Image
-                key={img.id}
-                src={img.url}
-                alt="image"
-                className="max-h-[20rem] grow object-cover"
-                width={200}
-                height={200}
-              />
-            ))}
-          </figure>
-        ) : null}
+        {images ? <PostImage images={images} /> : null}
       </main>
       <footer>
         <ul className="flex w-full items-center gap-4">

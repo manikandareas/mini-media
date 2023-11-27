@@ -12,6 +12,10 @@ const config = {
         hostname: "source.unsplash.com",
         protocol: "https",
       },
+      {
+        hostname: "utfs.io",
+        protocol: "https",
+      },
     ],
   },
 };

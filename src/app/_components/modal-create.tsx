@@ -31,22 +31,28 @@ import { api } from "~/trpc/react";
 import { useUploadThing } from "../lib/uploadthing";
 import { FormUploadPostSchema } from "../lib/validators";
 import type { z } from "zod";
+import { revalidatePath } from "next/cache";
 
 export function ModalCreate() {
   const [inputMedia, setInputMedia] = useState<(Blob | MediaSource)[]>([]);
   const [mediaURLs, setMediaURLs] = useState<string[]>([]);
 
+  const ctx = api.useUtils();
+
   const { mutateAsync, isLoading } = api.post.create.useMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success("Successfully create post!", {
         position: "bottom-right",
         duration: 5000,
       });
 
+      await ctx.post.getAll.invalidate();
       manualDialogClose();
       setInputMedia([]);
       form.resetField("content");
       form.setValue("content", "");
+
+      revalidatePath("/");
     },
   });
   const form = useForm<z.infer<typeof FormUploadPostSchema>>({
@@ -79,8 +85,7 @@ export function ModalCreate() {
 
   const handlerInputMediaChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files;
-    console.log({ formdata: e.target.files });
-    console.log({ inputMedia });
+
     if (file === null) {
       setInputMedia([]);
     } else {
