@@ -8,7 +8,7 @@ export default function FeedLoading() {
         .map((_, index) => (
           <article
             key={index}
-            className="flex h-[20rem] w-full flex-col gap-4 border p-4"
+            className="flex h-fit w-full flex-col gap-4 border p-4"
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -21,11 +21,11 @@ export default function FeedLoading() {
               <Skeleton className="h-2 w-6 rounded-sm" />
             </div>
             <div className="space-y-1">
-              <Skeleton className="h-4 w-[30rem]" />
-              <Skeleton className="h-4 w-[28rem]" />
-              <Skeleton className="h-4 w-[27rem]" />
-              <Skeleton className="h-4 w-[28rem]" />
-              <Skeleton className="h-4 w-[26rem]" />
+              <Skeleton className="h-4 w-[80%] md:w-[30rem]" />
+              <Skeleton className="h-4 w-[75%] md:w-[28rem]" />
+              <Skeleton className="h-4 w-[70%] md:w-[27rem]" />
+              <Skeleton className="h-4 w-[75%] md:w-[28rem]" />
+              <Skeleton className="h-4 w-[60%] md:w-[26rem]" />
             </div>
             <div className="flex gap-4">
               {Array(4)
