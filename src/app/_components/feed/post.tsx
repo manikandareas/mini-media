@@ -4,7 +4,7 @@ import { getFeedActionColor } from "~/app/helpers/getFeedActionColor";
 import { postFooterAction } from "~/app/lib/data";
 import { MoreHorizontal } from "lucide-react";
 import type { Images, Post, User } from "@prisma/client";
-import PostImage from "./post-image";
+import PostImage from "~/app/_components/feed/post-image";
 
 type Props = {
   user: User;
