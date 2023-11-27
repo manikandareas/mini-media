@@ -19,7 +19,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={cn("relative font-sans antialiased", inter.className)}>
         <NextAuthProvider>
           <TRPCReactProvider cookies={cookies().toString()}>

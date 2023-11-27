@@ -2,7 +2,7 @@ import Post from "~/app/_components/feed/post";
 import type { RouterOutputs } from "~/trpc/shared";
 
 type PostsResponse = RouterOutputs["post"]["getAll"];
-type FeedProps = {
+export type FeedProps = {
   data: PostsResponse;
 };
 export default function Feed({ data }: FeedProps) {
