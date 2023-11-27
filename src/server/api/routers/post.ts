@@ -7,14 +7,30 @@ import {
 } from "~/server/api/trpc";
 
 export const postRouter = createTRPCRouter({
-  getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.db.post.findMany({
-      orderBy: { createdAt: "desc" },
-      include: {
-        author: true,
-        images: true,
-      },
-    });
+  getAll: publicProcedure.query(async ({ ctx }) => {
+    const posts = await ctx.db.post
+      .findMany({
+        orderBy: { createdAt: "desc" },
+        include: {
+          author: true,
+          images: true,
+        },
+      })
+      .then((res) =>
+        res.map((post) => ({
+          media: post.images,
+          author: post.author,
+          post: {
+            id: post.id,
+            content: post.content,
+            createdAt: post.createdAt,
+            updatedAt: post.updatedAt,
+            authorId: post.authorId,
+          },
+        })),
+      );
+
+    return posts;
   }),
 
   create: privateProcedure

@@ -6,7 +6,6 @@ type Props = {
 };
 
 export default function FeedAside({}: Props) {
-  //   const [isActive, setIsActive] = useState<boolean>(false);
   return (
     <aside className="hidden max-h-[1600px] max-w-[22rem] flex-col gap-y-4 px-4 md:flex md:grow">
       <div className="group flex items-center justify-center">

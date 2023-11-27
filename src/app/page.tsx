@@ -11,9 +11,9 @@ export default async function Home() {
         {data ? (
           data.map((post) => (
             <Post
-              key={post.id}
-              images={post.images}
-              post={post}
+              key={post.post.id}
+              images={post.media}
+              post={post.post}
               user={post.author}
             />
           ))
