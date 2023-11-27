@@ -7,6 +7,10 @@ type PostsResponse = RouterOutputs["post"]["getAll"];
 export default async function Feed() {
   const data: PostsResponse = await api.post.getAll.query();
 
+  if (!data) {
+    return <h1>Data not found</h1>;
+  }
+
   return (
     <main className="flex min-h-screen w-full max-w-[37.5rem] flex-col">
       {data.length !== 0 ? (
