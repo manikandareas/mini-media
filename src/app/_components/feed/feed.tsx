@@ -1,17 +1,12 @@
-"use client";
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/server";
 import Post from "~/app/_components/feed/post";
 
-export default function Feed() {
-  const { data, isLoading } = api.post.getAll.useQuery();
-
-  if (isLoading) {
-    return <h1>Loading...</h1>;
-  }
+export default async function Feed() {
+  const data = await api.post.getAll.query();
 
   return (
     <main className="flex min-h-screen w-full max-w-[37.5rem] flex-col">
-      {data ? (
+      {data.length > 0 ? (
         data.map((post) => (
           <Post
             key={post.post.id}

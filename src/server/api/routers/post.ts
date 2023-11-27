@@ -1,3 +1,4 @@
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { imageSchema } from "~/app/lib/validators";
 import {
@@ -8,29 +9,36 @@ import {
 
 export const postRouter = createTRPCRouter({
   getAll: publicProcedure.query(async ({ ctx }) => {
-    const posts = await ctx.db.post
-      .findMany({
-        orderBy: { createdAt: "desc" },
-        include: {
-          author: true,
-          images: true,
-        },
-      })
-      .then((res) =>
-        res.map((post) => ({
-          media: post.images,
-          author: post.author,
-          post: {
-            id: post.id,
-            content: post.content,
-            createdAt: post.createdAt,
-            updatedAt: post.updatedAt,
-            authorId: post.authorId,
+    try {
+      const posts = await ctx.db.post
+        .findMany({
+          orderBy: { createdAt: "desc" },
+          include: {
+            author: true,
+            images: true,
           },
-        })),
-      );
+        })
+        .then((res) =>
+          res.map((post) => ({
+            media: post.images,
+            author: post.author,
+            post: {
+              id: post.id,
+              content: post.content,
+              createdAt: post.createdAt,
+              updatedAt: post.updatedAt,
+              authorId: post.authorId,
+            },
+          })),
+        );
 
-    return posts;
+      return posts;
+    } catch (error) {
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Something went wrong with the server",
+      });
+    }
   }),
 
   create: privateProcedure
