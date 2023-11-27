@@ -1,15 +1,11 @@
-"use client";
 import Post from "~/app/_components/feed/post";
-import { api } from "~/trpc/react";
-import FeedLoading from "~/app/_components/feed/feed-loading";
+import type { RouterOutputs } from "~/trpc/shared";
 
-export default function Feed() {
-  const { data, isLoading } = api.post.getAll.useQuery();
-
-  if (!data || isLoading) {
-    return <FeedLoading />;
-  }
-
+type PostsResponse = RouterOutputs["post"]["getAll"];
+type FeedProps = {
+  data: PostsResponse;
+};
+export default function Feed({ data }: FeedProps) {
   return (
     <main className="flex min-h-screen w-full max-w-[37.5rem] flex-col">
       {data.length > 0 ? (
