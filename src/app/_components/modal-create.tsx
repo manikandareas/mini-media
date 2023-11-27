@@ -32,6 +32,7 @@ import { useUploadThing } from "../lib/uploadthing";
 import { FormUploadPostSchema } from "../lib/validators";
 import type { z } from "zod";
 import { revalidatePath } from "next/cache";
+import Spinner from "./spinner";
 
 export function ModalCreate() {
   const [inputMedia, setInputMedia] = useState<(Blob | MediaSource)[]>([]);
@@ -206,7 +207,10 @@ export function ModalCreate() {
               </div>
               <div
                 title="Gif"
-                className="cursor-pointer rounded-full p-1.5 text-blue-600 hover:bg-blue-600/10"
+                className={cn(
+                  "cursor-pointer rounded-full p-1.5 text-blue-600 hover:bg-blue-600/10",
+                  { "text-slate-500": inputMedia.length > 0 },
+                )}
               >
                 <Cat size={18} />
               </div>
@@ -216,7 +220,7 @@ export function ModalCreate() {
                 Archive
               </Button>
               <Button type="submit" disabled={isLoading || isImageUploading}>
-                Publish
+                {isLoading ? <Spinner size={20} /> : "Publish"}
               </Button>
             </div>
           </form>

@@ -25,9 +25,7 @@ export default async function Header() {
             ) : (
               <Link
                 href={"/api/auth/signin"}
-                className={cn(
-                  buttonVariants({ size: "sm", variant: "default" }),
-                )}
+                className={cn(buttonVariants({ size: "sm", variant: "ghost" }))}
               >
                 Sign In
               </Link>
