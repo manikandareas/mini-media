@@ -1,5 +1,6 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
+import { extractTagsFromStatus } from "~/app/helpers/extractTagsFromStatus";
 import { imageSchema } from "~/app/lib/validators";
 import {
   createTRPCRouter,
@@ -49,8 +50,8 @@ export const postRouter = createTRPCRouter({
           .min(2, {
             message: "Content must be at least 2 characters.",
           })
-          .max(160, {
-            message: "Text must not be longer than 30 characters.",
+          .max(255, {
+            message: "Text must not be longer than 255 characters.",
           }),
         media: z.array(imageSchema).max(4),
       }),
@@ -62,6 +63,16 @@ export const postRouter = createTRPCRouter({
           authorId: ctx.session.user.id,
         },
       });
+
+      const extractedTags = extractTagsFromStatus(input.content);
+      if (extractedTags) {
+        await ctx.db.tags.createMany({
+          data: extractedTags.map((tag) => ({
+            tag,
+            postId: createdPost.id,
+          })),
+        });
+      }
 
       if (!input.media) {
         return {

@@ -50,10 +50,8 @@ export default function DropdownAvatar() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Avatar className="h-8 w-8 hover:cursor-pointer md:h-10 md:w-10">
-          <AvatarImage
-            src={data?.user.image ?? "https://github.com/shadcn.png"}
-          />
-          <AvatarFallback>{data?.user.name ?? "CN"}</AvatarFallback>
+          <AvatarImage src={data?.user.image ?? "https://robohash.org/alien"} />
+          <AvatarFallback>{"Avatar"}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">

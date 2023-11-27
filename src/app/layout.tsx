@@ -30,7 +30,9 @@ export default function RootLayout({
               disableTransitionOnChange
             >
               <Header />
-              {children}
+              <main className="relative mx-auto flex max-w-6xl justify-center ">
+                {children}
+              </main>
               <Toaster />
             </ThemeProvider>
           </TRPCReactProvider>
