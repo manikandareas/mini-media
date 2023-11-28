@@ -1,14 +1,18 @@
 "use client";
 import Post from "~/app/_components/feed/post";
-import { api } from "~/trpc/react";
-import FeedLoading from "~/app/_components/feed/feed-loading";
 
-export default function Feed() {
-  const { data, isLoading } = api.post.getAll.useQuery();
+import type { PostsResponse } from "~/app/page";
 
-  if (!data || isLoading) {
-    return <FeedLoading />;
-  }
+type FeedProps = {
+  data: PostsResponse;
+};
+export default function Feed(props: FeedProps) {
+  const { data } = props;
+  // const { data, isLoading } = api.post.getAll.useQuery();
+
+  // if (!data || isLoading) {
+  //   return <FeedLoading />;
+  // }
 
   return (
     <section className=" flex min-h-screen w-full max-w-[37.5rem] flex-col">
