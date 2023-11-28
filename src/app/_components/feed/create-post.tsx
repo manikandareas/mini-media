@@ -4,12 +4,15 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Textarea } from "../ui/textarea";
 import { Separator } from "../ui/separator";
 import { Label } from "../ui/label";
-import { Cat, ImageIcon, ScanSearch } from "lucide-react";
+import { Cat, ImageIcon, Loader2, ScanSearch } from "lucide-react";
 import { Input } from "../ui/input";
 import { cn } from "~/app/lib/utils";
 import { Button } from "../ui/button";
 import { useSession } from "next-auth/react";
-import PostImage from "./post-image";
+import PreviewImage from "./preview-image";
+import { api } from "~/trpc/react";
+import toast from "react-hot-toast";
+import { useUploadThing } from "~/app/lib/uploadthing";
 
 function CreatePost() {
   const [val, setVal] = useState("");
@@ -19,9 +22,53 @@ function CreatePost() {
 
   const { data } = useSession();
 
+  const apiCtx = api.useUtils();
+  const { mutateAsync, isLoading } = api.post.create.useMutation({
+    onSuccess: async () => {
+      toast.success("Successfully created post!", {
+        position: "bottom-right",
+        duration: 5000,
+      });
+
+      await apiCtx.post.getAll.invalidate();
+
+      setInputMedia([]);
+      setVal("");
+    },
+    onError: (error) => {
+      toast.error(error.message, {
+        position: "bottom-right",
+        duration: 5000,
+      });
+    },
+  });
+
+  const { startUpload, isUploading: isImageUploading } =
+    useUploadThing("imageUploader");
+
+  const handlerSubmit = async () => {
+    try {
+      const media = inputMedia
+        ? await startUpload(inputMedia as File[]).then((res) => {
+            const formattedMedia = res?.map((image) => ({
+              id: image.name,
+              url: image.url,
+            }));
+            return formattedMedia ?? [];
+          })
+        : [];
+
+      await mutateAsync({
+        status: val,
+        media,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handlerInputMediaChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files;
-
     if (file === null) {
       setInputMedia([]);
     } else {
@@ -56,9 +103,12 @@ function CreatePost() {
     }
   }, [val]);
   return (
-    <section className="flex h-auto gap-4 border p-4">
+    <section className="hidden h-auto -translate-y-44 gap-4 border p-4 opacity-0 transition-all ease-in-out md:flex md:translate-y-0 md:opacity-100">
       <div className="w-fit">
-        <Avatar className="h-8 w-8 hover:cursor-pointer md:h-10 md:w-10">
+        <Avatar
+          className="h-8 w-8 hover:cursor-pointer md:h-10 md:w-10"
+          title={data?.user.name ?? "CN"}
+        >
           <AvatarImage src={data?.user.image ?? "https://robohash.org/alien"} />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
@@ -75,7 +125,10 @@ function CreatePost() {
           />
         </div>
         {mediaURLs.length > 0 ? (
-          <PostImage images={mediaURLs.map((url, idx) => ({ url, id: idx }))} />
+          <PreviewImage
+            previewSource={mediaURLs}
+            deleteAction={handlerRemoveMedia}
+          />
         ) : null}
         <Separator className="h-[2px] w-full" />
         <div className="flex items-center justify-between">
@@ -124,11 +177,16 @@ function CreatePost() {
           </div>
           <div>
             <Button
-              className="h-fit rounded-full px-5 py-2 font-semibold"
+              className="flex h-fit items-center justify-center rounded-full font-semibold"
               variant={"default"}
-              disabled={!val}
+              disabled={!val || isImageUploading || isLoading}
+              onClick={handlerSubmit}
             >
-              Post
+              {isLoading || isImageUploading ? (
+                <Loader2 className="mx-2 h-4 w-4 animate-spin" />
+              ) : (
+                "Post"
+              )}
             </Button>
           </div>
         </div>

@@ -7,7 +7,7 @@ type Props = {
 
 export default function FeedAside({}: Props) {
   return (
-    <aside className="hidden max-h-[1600px] max-w-[22rem] flex-col gap-y-4 px-4 md:flex md:grow">
+    <aside className="hidden max-h-[1600px] max-w-[22rem] flex-col gap-y-4 px-4 md:grow lg:flex">
       <div className="group flex items-center justify-center">
         <Input
           type="search"
