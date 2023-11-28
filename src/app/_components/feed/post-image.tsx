@@ -1,24 +1,27 @@
-import type { Images } from "@prisma/client";
 import Image from "next/image";
 
 type Props = {
-  images: Images[];
+  images: {
+    id?: number;
+    url: string;
+    postId?: number;
+  }[];
 };
 
 export default function PostImage({ images }: Props) {
   return (
-    <figure className="flex flex-wrap">
+    <figure className="flex flex-wrap justify-center gap-1">
       {images.length === 1
         ? images.map((img) => (
             <Image
               key={img.id}
               src={img.url}
               alt="image"
-              className="max-h-[32rem] grow overflow-hidden rounded-lg object-cover"
+              className="max-w-[35.375rem] overflow-hidden rounded-lg object-cover"
               quality={100}
-              width={512}
-              height={512}
-              priority
+              width={566}
+              height={566}
+              loading="lazy"
             />
           ))
         : images.length === 2
@@ -27,11 +30,11 @@ export default function PostImage({ images }: Props) {
                 key={img.id}
                 src={img.url}
                 alt="image"
-                className="max-w-[calc(100%/2)] grow rounded-lg object-cover"
+                className="max-w-[calc(100%/2-4px)] rounded-lg object-cover"
                 quality={100}
-                width={256}
-                height={256}
-                priority
+                loading="lazy"
+                width={283}
+                height={283}
               />
             ))
           : images.length === 3
@@ -42,11 +45,11 @@ export default function PostImage({ images }: Props) {
                       key={img.id}
                       src={img.url}
                       alt="image"
-                      className="max-h-[32rem] grow rounded-lg object-cover"
+                      className="max-w-[35.375rem] rounded-lg object-cover"
                       quality={100}
-                      width={512}
-                      height={512}
-                      priority
+                      width={566}
+                      height={566}
+                      loading="lazy"
                     />
                   );
                 }
@@ -55,11 +58,11 @@ export default function PostImage({ images }: Props) {
                     key={img.id}
                     src={img.url}
                     alt="image"
-                    className="max-w-[calc(100%/2)]  grow rounded-lg object-cover"
+                    className="max-w-[calc(100%/2-4px)] rounded-lg object-cover"
                     quality={100}
-                    width={256}
-                    height={256}
-                    priority
+                    width={283}
+                    height={283}
+                    loading="lazy"
                   />
                 );
               })
@@ -70,11 +73,11 @@ export default function PostImage({ images }: Props) {
                       key={img.id}
                       src={img.url}
                       alt="image"
-                      className=" grow rounded-lg object-cover"
+                      className="rounded-lg object-cover"
                       quality={100}
-                      width={512}
-                      height={512}
-                      priority
+                      width={566}
+                      height={566}
+                      loading="lazy"
                     />
                   );
                 }
@@ -83,11 +86,12 @@ export default function PostImage({ images }: Props) {
                     key={img.id}
                     src={img.url}
                     alt="image"
-                    className=" max-w-[calc(100%/3)] grow rounded-lg object-cover"
+                    className="max-w-[calc(100%/3-4px)] rounded-lg object-cover"
+                    sizes="(max-width: calc(100%/3)) 100vw, calc(100%/3)"
                     quality={100}
-                    width={200}
-                    height={200}
-                    priority
+                    width={188}
+                    height={188}
+                    loading="lazy"
                   />
                 );
               })}
