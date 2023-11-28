@@ -32,7 +32,7 @@ export default function Post({ images, post, user }: Props) {
         </i>
       </header>
       <main className="space-y-2">
-        <p className="text-lg text-primary">{post.content}</p>
+        <p className="text-lg text-primary">{post.status}</p>
         {images ? <PostImage images={images} /> : null}
       </main>
       <footer>

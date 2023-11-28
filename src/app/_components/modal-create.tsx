@@ -41,7 +41,7 @@ export function ModalCreate() {
 
   const { mutateAsync, isLoading } = api.post.create.useMutation({
     onSuccess: async () => {
-      toast.success("Successfully create post!", {
+      toast.success("Successfully created post!", {
         position: "bottom-right",
         duration: 5000,
       });
@@ -49,8 +49,8 @@ export function ModalCreate() {
       await apiCtx.post.getAll.invalidate();
       manualDialogClose();
       setInputMedia([]);
-      form.resetField("content");
-      form.setValue("content", "");
+      form.resetField("status");
+      form.setValue("status", "");
     },
     onError: (error) => {
       toast.error(error.message, {
@@ -79,7 +79,7 @@ export function ModalCreate() {
         : [];
 
       await mutateAsync({
-        content: data.content,
+        status: data.status,
         media,
       });
     } catch (error) {
@@ -137,10 +137,10 @@ export function ModalCreate() {
           >
             <FormField
               control={form.control}
-              name="content"
+              name="status"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Text</FormLabel>
+                  <FormLabel>Status</FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="What is happening?!"

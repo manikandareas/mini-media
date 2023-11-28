@@ -75,7 +75,7 @@ model VerificationToken {
 
 model Post {
     id       Int    @id @default(autoincrement())
-    content  String @db.Text
+    status   String @db.Text
     authorId String
     author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
 

@@ -25,7 +25,7 @@ export const postRouter = createTRPCRouter({
             author: post.author,
             post: {
               id: post.id,
-              content: post.content,
+              status: post.status,
               createdAt: post.createdAt,
               updatedAt: post.updatedAt,
               authorId: post.authorId,
@@ -45,10 +45,10 @@ export const postRouter = createTRPCRouter({
   create: privateProcedure
     .input(
       z.object({
-        content: z
+        status: z
           .string()
           .min(2, {
-            message: "Content must be at least 2 characters.",
+            message: "Status must be at least 2 characters.",
           })
           .max(255, {
             message: "Text must not be longer than 255 characters.",
@@ -59,12 +59,12 @@ export const postRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const createdPost = await ctx.db.post.create({
         data: {
-          content: input.content,
+          status: input.status,
           authorId: ctx.session.user.id,
         },
       });
 
-      const extractedTags = extractTagsFromStatus(input.content);
+      const extractedTags = extractTagsFromStatus(input.status);
       if (extractedTags) {
         await ctx.db.tags.createMany({
           data: extractedTags.map((tag) => ({

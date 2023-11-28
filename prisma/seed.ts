@@ -23,31 +23,31 @@ async function main() {
   await db.post.createMany({
     data: [
       {
-        content:
+        status:
           "Hari ini suka hangat, semoga mendapatkan cuaca yang baik di hari ini 🌞🌸. Saya sedang mencoba membuat rencana untuk minggu depan, semoga semua bisa berjalan sesuai rencana 📅👍. Saya juga sedang mencoba untuk mencapai beberapa tujuan pribadi, semoga bisa mencapainya dengan baik 🎯👍.",
         authorId: alice.id,
         id: 1,
       },
       {
-        content:
+        status:
           "Terlalu banyak pekerjaan, tapi semoga bisa selesai semua tugas dalam waktu dekat 😅💻. Saya juga sedang mencoba untuk menjaga kesehatan, semoga bisa tetap sehat dan bugar 💪👍. Saya juga sedang mencoba untuk menjaga hubungan dengan orang-orang yang saya cintai, semoga bisa tetap baik-baik saja 🤗👍.",
         authorId: alice.id,
         id: 2,
       },
       {
-        content:
+        status:
           "Acara keluarga di hari ini, semoga semua berjalan lancar 🎉👨‍👩‍👧‍👦. Saya juga sedang mencoba untuk menjaga keseragaman dalam keluarga, semoga bisa tetap baik-baik saja 👫👍. Saya juga sedang mencoba untuk menjaga kesejahteraan anggota keluarga, semoga bisa tetap baik-baik saja 🏠👍.",
         authorId: alice.id,
         id: 3,
       },
       {
-        content:
+        status:
           "Makan siang, hari ini saya makan nasi goreng 🍚😋. Saya juga sedang mencoba untuk menjaga diet, semoga bisa tetap sehat dan bugar 🍎👍. Saya juga sedang mencoba untuk menjaga kesehatan, semoga bisa tetap sehat dan bugar 💪👍.",
         authorId: alice.id,
         id: 4,
       },
       {
-        content:
+        status:
           "Belajar kuliah, semoga bisa lulus dengan baik 🎓👍. Saya juga sedang mencoba untuk menjaga kesehatan, semoga bisa tetap sehat dan bugar 💪👍. Saya juga sedang mencoba untuk menjaga kesejahteraan, semoga bisa tetap baik-baik saja 👍👍.",
         authorId: alice.id,
         id: 5,
@@ -107,31 +107,31 @@ async function main() {
   await db.post.createMany({
     data: [
       {
-        content:
+        status:
           "Membuat rencana untuk minggu depan, semoga semua bisa berjalan sesuai rencana 📅👍. Saya juga sedang mencoba untuk menjaga kesehatan, semoga bisa tetap sehat dan bugar 💪👍. Saya juga sedang mencoba untuk menjaga kesejahteraan, semoga bisa tetap baik-baik saja 👍👍.",
         authorId: bob.id,
         id: 6,
       },
       {
-        content:
+        status:
           "Hari ini cuaca hujan, tetapi saya merasa bahagia 🌧️😊. Saya juga sedang mencoba untuk menjaga kesehatan, semoga bisa tetap sehat dan bugar 💪👍. Saya juga sedang mencoba untuk menjaga kesejahteraan, semoga bisa tetap baik-baik saja 👍👍.",
         authorId: bob.id,
         id: 7,
       },
       {
-        content:
+        status:
           "Membuat rencana untuk bulan depan, semoga semua bisa berjalan lancar 📆👍. Saya juga sedang mencoba untuk menjaga kesehatan, semoga bisa tetap sehat dan bugar 💪👍. Saya juga sedang mencoba untuk menjaga kesejahteraan, semoga bisa tetap baik-baik saja 👍👍.",
         authorId: bob.id,
         id: 8,
       },
       {
-        content:
+        status:
           "Saya merasa kesel, tetapi semoga bisa mengatasinya dengan positif 😔💪. Saya juga sedang mencoba untuk menjaga kesehatan, semoga bisa tetap sehat dan bugar 💪👍. Saya juga sedang mencoba untuk menjaga kesejahteraan, semoga bisa tetap baik-baik saja 👍👍.",
         authorId: bob.id,
         id: 9,
       },
       {
-        content:
+        status:
           "Hari ini saya merasa bahagia, tetapi semoga bisa tetap bahagia di hari-hari mendatang 😊🌞. Saya juga sedang mencoba untuk menjaga kesehatan, semoga bisa tetap sehat dan bugar 💪👍. Saya juga sedang mencoba untuk menjaga kesejahteraan, semoga bisa tetap baik-baik saja 👍👍.",
         authorId: bob.id,
         id: 10,
