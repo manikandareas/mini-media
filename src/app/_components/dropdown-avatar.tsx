@@ -38,6 +38,7 @@ import {
 } from "~/app/_components/ui/dropdown-menu";
 import { ModeToggle } from "./mode-toggle";
 import { signOut, useSession } from "next-auth/react";
+import { defaultImage } from "../lib/data";
 
 export default function DropdownAvatar() {
   const { data } = useSession();
@@ -50,7 +51,9 @@ export default function DropdownAvatar() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Avatar className="h-8 w-8 hover:cursor-pointer md:h-10 md:w-10">
-          <AvatarImage src={data?.user.image ?? "https://robohash.org/alien"} />
+          <AvatarImage
+            src={data?.user.image ?? defaultImage(data?.user.name)}
+          />
           <AvatarFallback>{"Avatar"}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>

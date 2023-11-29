@@ -1,8 +1,11 @@
 "use client";
-import Post from "~/app/_components/feed/post";
+import Post from "~/app/_components/post/post";
 import { api } from "~/trpc/react";
 import FeedLoading from "./feed-loading";
-import CreatePost from "./create-post";
+import FormCreatePost from "../form/form-create-post";
+import { PopupCreatePost } from "../form/popup-create-post";
+import { Banana } from "lucide-react";
+import { Button } from "../ui/button";
 
 export default function Feed() {
   const { data, isLoading } = api.post.getAll.useQuery();
@@ -12,8 +15,16 @@ export default function Feed() {
   }
 
   return (
-    <section className=" flex min-h-screen w-full max-w-[37.5rem] flex-col">
-      <CreatePost />
+    <section className=" relative flex min-h-screen w-full max-w-[37.5rem] flex-col">
+      <FormCreatePost />
+      <PopupCreatePost>
+        <Button
+          size={"icon"}
+          className="fixed bottom-4 right-4 z-50 rounded-full md:hidden"
+        >
+          <Banana />
+        </Button>
+      </PopupCreatePost>
       {data.length > 0 ? (
         data.map((post) => (
           <Post

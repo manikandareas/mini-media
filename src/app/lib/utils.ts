@@ -8,3 +8,7 @@ export function cn(...inputs: ClassValue[]) {
 export const manualDialogClose = () => {
   document.getElementById("closeDialog")?.click();
 };
+
+export const manualSheetClose = () => {
+  document.getElementById("sheetClose")?.click();
+};

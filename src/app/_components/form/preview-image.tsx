@@ -5,10 +5,10 @@ import { getRelativeSize } from "~/app/helpers/getRelativeSize";
 
 type Props = {
   previewSource: string[];
-  deleteAction: (idx: number) => void;
+  removeAction: (idx: number) => void;
 };
 
-export default function PreviewImage({ previewSource, deleteAction }: Props) {
+export default function PreviewImage({ previewSource, removeAction }: Props) {
   return (
     <figure className="flex flex-wrap gap-1">
       {previewSource.length === 3
@@ -17,8 +17,8 @@ export default function PreviewImage({ previewSource, deleteAction }: Props) {
               return (
                 <div key={idx} className="relative">
                   <i
-                    className="absolute right-1 top-1 cursor-pointer rounded-full bg-black/50 p-1"
-                    onClick={() => deleteAction(idx)}
+                    className="absolute right-1 top-1 cursor-pointer rounded-full bg-black/50 p-1 text-white"
+                    onClick={() => removeAction(idx)}
                   >
                     <X size={18} />
                   </i>
@@ -35,8 +35,8 @@ export default function PreviewImage({ previewSource, deleteAction }: Props) {
             return (
               <div key={idx} className="relative">
                 <i
-                  className="absolute right-1 top-1 cursor-pointer rounded-full bg-black/50 p-1"
-                  onClick={() => deleteAction(idx)}
+                  className="absolute right-1 top-1 cursor-pointer  rounded-full bg-black/50 p-1 text-white"
+                  onClick={() => removeAction(idx)}
                 >
                   <X size={18} />
                 </i>
@@ -53,8 +53,8 @@ export default function PreviewImage({ previewSource, deleteAction }: Props) {
         : previewSource.map((src, idx) => (
             <div key={idx} className="relative">
               <i
-                className="absolute right-1 top-1 cursor-pointer rounded-full bg-black/50 p-1"
-                onClick={() => deleteAction(idx)}
+                className="absolute right-1 top-1 cursor-pointer  rounded-full bg-black/50 p-1 text-white"
+                onClick={() => removeAction(idx)}
               >
                 <X size={18} />
               </i>

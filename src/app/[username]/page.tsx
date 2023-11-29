@@ -1,4 +1,4 @@
-import React from "react";
+import Counter from "../_components/counter";
 import FeedAside from "../_components/feed/feed-aside";
 
 export default function ProfilePage({
@@ -8,6 +8,7 @@ export default function ProfilePage({
 }) {
   return (
     <>
+      <Counter />
       <h1>{params.username}</h1>
       <FeedAside />
     </>

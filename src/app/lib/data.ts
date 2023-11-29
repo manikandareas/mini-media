@@ -37,3 +37,9 @@ export const postFooterAction = [
     name: "share",
   },
 ];
+
+export const defaultImage = (name?: string | undefined | null): string => {
+  return !name
+    ? "https://ui-avatars.com/api/?background=0D8ABC&color=fff"
+    : `https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=${name}`;
+};

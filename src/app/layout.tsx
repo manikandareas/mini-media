@@ -7,6 +7,7 @@ import { NextAuthProvider } from "./_components/auth-provider";
 import Header from "./_components/header";
 import { cn } from "./lib/utils";
 import { Toaster } from "react-hot-toast";
+import ReduxProvider from "./_components/redux-provider";
 
 export const metadata = {
   title: "Create T3 App",
@@ -23,18 +24,20 @@ export default function RootLayout({
       <body className={cn("relative font-sans antialiased", inter.className)}>
         <NextAuthProvider>
           <TRPCReactProvider cookies={cookies().toString()}>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
-            >
-              <Header />
-              <main className="relative mx-auto flex max-w-6xl justify-center ">
-                {children}
-              </main>
-              <Toaster />
-            </ThemeProvider>
+            <ReduxProvider>
+              <ThemeProvider
+                attribute="class"
+                defaultTheme="system"
+                enableSystem
+                disableTransitionOnChange
+              >
+                <Header />
+                <main className="relative mx-auto flex max-w-6xl justify-center ">
+                  {children}
+                </main>
+                <Toaster />
+              </ThemeProvider>
+            </ReduxProvider>
           </TRPCReactProvider>
         </NextAuthProvider>
       </body>

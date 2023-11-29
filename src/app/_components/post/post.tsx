@@ -1,10 +1,10 @@
 import { cn } from "~/app/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { getFeedActionColor } from "~/app/helpers/getFeedActionColor";
-import { postFooterAction } from "~/app/lib/data";
+import { defaultImage, postFooterAction } from "~/app/lib/data";
 import { MoreHorizontal } from "lucide-react";
 import type { Images, Post, User } from "@prisma/client";
-import PostImage from "~/app/_components/feed/post-image";
+import PostImage from "~/app/_components/post/post-image";
 
 type Props = {
   user: User;
@@ -18,7 +18,7 @@ export default function Post({ images, post, user }: Props) {
       <header className="flex w-full items-center justify-between">
         <div className="flex items-center gap-2">
           <Avatar className="h-8 w-8 hover:cursor-pointer md:h-10 md:w-10">
-            <AvatarImage src={user.image ?? "https://github.com/shadcn.png"} />
+            <AvatarImage src={user.image ?? defaultImage(user.name)} />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
 
