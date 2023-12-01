@@ -6,9 +6,12 @@ import FormCreatePost from "../form/form-create-post";
 import { PopupCreatePost } from "../form/popup-create-post";
 import { Banana } from "lucide-react";
 import { Button } from "../ui/button";
+import { useSession } from "next-auth/react";
 
 export default function Feed() {
   const { data, isLoading } = api.post.getAll.useQuery();
+
+  const { status: isUserSignedIn } = useSession();
 
   if (!data || isLoading) {
     return <FeedLoading />;
@@ -16,15 +19,19 @@ export default function Feed() {
 
   return (
     <section className=" relative flex min-h-screen w-full max-w-[37.5rem] flex-col">
-      <FormCreatePost />
-      <PopupCreatePost>
-        <Button
-          size={"icon"}
-          className="fixed bottom-4 right-4 z-50 rounded-full md:hidden"
-        >
-          <Banana />
-        </Button>
-      </PopupCreatePost>
+      {isUserSignedIn === "authenticated" ? (
+        <>
+          <FormCreatePost />
+          <PopupCreatePost>
+            <Button
+              size={"icon"}
+              className="fixed bottom-4 right-4 z-50 rounded-full md:hidden"
+            >
+              <Banana />
+            </Button>
+          </PopupCreatePost>
+        </>
+      ) : null}
       {data.length > 0 ? (
         data.map((post) => (
           <Post

@@ -11,7 +11,7 @@ export const FormUploadPostSchema = z.object({
     .min(2, {
       message: "Status must be at least 2 characters.",
     })
-    .max(255, {
-      message: "Bio must not be longer than 255 characters.",
+    .max(280, {
+      message: "Bio must not be longer than 280 characters.",
     }),
 });

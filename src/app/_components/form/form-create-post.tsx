@@ -18,12 +18,8 @@ import { useInputMedia } from "~/app/_hooks/useInputMedia";
 
 function FormCreatePost() {
   const { textAreaRef, statusValue } = useGrowingTextarea();
-  const {
-    handlerInputMediaChange,
-    handlerRemoveMedia,
-    mediaFiles,
-    mediaURLs,
-  } = useInputMedia()
+  const { handlerInputMediaChange, handlerRemoveMedia, mediaFiles, mediaURLs } =
+    useInputMedia();
 
   const { data } = useSession();
 
@@ -39,8 +35,8 @@ function FormCreatePost() {
 
       await apiCtx.post.getAll.invalidate();
 
-     dispatch( setMediaFiles([]));
-     dispatch(setStatus(""))
+      dispatch(setMediaFiles([]));
+      dispatch(setStatus(""));
     },
     onError: (error) => {
       toast.error(error.message, {
@@ -91,25 +87,25 @@ function FormCreatePost() {
         <div className="">
           <Textarea
             ref={textAreaRef}
-            onChange={(e) =>dispatch(setStatus(e.target.value))}
+            onChange={(e) => dispatch(setStatus(e.target.value))}
             className="w-full resize-none overflow-hidden border-none text-lg  focus:border-none focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-transparent active:border-none active:outline-none"
             rows={1}
             value={statusValue}
             placeholder="What's on your mind?"
+            maxLength={280}
           />
         </div>
         {mediaURLs.length > 0 ? (
           <PreviewImage
             previewSource={mediaURLs}
             removeAction={handlerRemoveMedia}
-            key={crypto.randomUUID()}
           />
         ) : null}
         <Separator className="h-[2px] w-full" />
         <div className="flex items-center justify-between">
           <RibbonMenu
             handlerInputMediaChange={handlerInputMediaChange}
-           mediaFiles={mediaFiles}
+            mediaFiles={mediaFiles}
           />
           <div>
             <Button

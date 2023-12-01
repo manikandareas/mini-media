@@ -1,9 +1,10 @@
 import { type ChangeEvent, useEffect } from "react";
+import postSelector from "~/state/post/postSelector";
 import { setMediaFiles, setMediaURLs } from "~/state/post/postSlice";
 import { useAppDispatch, useAppSelector } from "~/state/store";
 
 const useInputMedia = () => {
-  const { mediaFiles, mediaURLs } = useAppSelector((state) => state.post);
+  const { mediaFiles, mediaURLs } = useAppSelector(postSelector);
 
   const dispatch = useAppDispatch();
 

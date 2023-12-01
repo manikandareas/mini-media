@@ -25,7 +25,8 @@ import { defaultImage } from "~/app/lib/data";
 import { useAppDispatch } from "~/state/store";
 import { setMediaFiles, setStatus } from "~/state/post/postSlice";
 
-export function PopupCreatePost({ children }: PropsWithChildren) {
+type PopupCreatePostProps = PropsWithChildren;
+export function PopupCreatePost({ children }: PopupCreatePostProps) {
   const { textAreaRef, statusValue } = useGrowingTextarea();
 
   const { handlerInputMediaChange, handlerRemoveMedia, mediaFiles, mediaURLs } =
@@ -45,6 +46,7 @@ export function PopupCreatePost({ children }: PropsWithChildren) {
         await apiCtx.post.getAll.invalidate();
         dispatch(setMediaFiles([]));
         dispatch(setStatus(""));
+        manualSheetClose();
       },
       onError: (error) => {
         toast.error(error.message, {
@@ -80,7 +82,7 @@ export function PopupCreatePost({ children }: PropsWithChildren) {
   return (
     <Sheet>
       <SheetTrigger asChild>{children}</SheetTrigger>
-      <SheetContent className="h-auto">
+      <SheetContent className="h-auto overflow-y-scroll">
         <SheetHeader>
           <SheetTitle>Create Post</SheetTitle>
         </SheetHeader>
@@ -97,18 +99,16 @@ export function PopupCreatePost({ children }: PropsWithChildren) {
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
           </div>
-          <div className="flex flex-1 flex-col gap-1.5">
-            <div className="">
-              <Textarea
-                ref={textAreaRef}
-                onChange={(e) => dispatch(setStatus(e.target.value))}
-                className="w-full resize-none overflow-hidden border-none text-lg focus:border-none focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-transparent active:border-none active:outline-none"
-                rows={3}
-                value={statusValue}
-                placeholder="What's on your mind?"
-              />
-            </div>
-            {/* TODO: FIX THIS PREVIEW */}
+          <div className="flex grow flex-col">
+            <Textarea
+              ref={textAreaRef}
+              onChange={(e) => dispatch(setStatus(e.target.value))}
+              className="w-full resize-none overflow-hidden border-none text-lg focus:border-none focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-transparent active:border-none active:outline-none"
+              rows={3}
+              value={statusValue}
+              placeholder="What's on your mind?"
+              maxLength={280}
+            />
           </div>
         </section>
         {mediaURLs.length > 0 ? (
@@ -125,7 +125,11 @@ export function PopupCreatePost({ children }: PropsWithChildren) {
               handlerInputMediaChange={handlerInputMediaChange}
               mediaFiles={mediaFiles}
             />
-            <Button variant={"outline"} onClick={manualSheetClose}>
+            <Button
+              variant={"outline"}
+              onClick={handlerSubmit}
+              disabled={uploadingImageIsLoading || submitPostIsLoading}
+            >
               Post
             </Button>
           </div>
