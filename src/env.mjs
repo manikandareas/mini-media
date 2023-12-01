@@ -19,6 +19,11 @@ export const env = createEnv({
       .enum(["development", "test", "production"])
       .default("development"),
     UPLOADTHING_SECRET: z.string().min(1),
+    UPLOADTHING_APP_ID: z.string().min(1),
+    AUTH_GITHUB_ID: z.string().min(1),
+    AUTH_GITHUB_SECRET: z.string().min(1),
+    AUTH_SECRET: z.string().min(1),
+    NEXTAUTH_URL: z.string().url(),
   },
 
   /**
@@ -37,7 +42,12 @@ export const env = createEnv({
   runtimeEnv: {
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
+    AUTH_GITHUB_ID: process.env.AUTH_GITHUB_ID,
+    AUTH_GITHUB_SECRET: process.env.AUTH_GITHUB_SECRET,
+    AUTH_SECRET: process.env.AUTH_SECRET,
+    NEXTAUTH_URL: process.env.NEXTAUTH_URL,
     UPLOADTHING_SECRET: process.env.UPLOADTHING_SECRET,
+    UPLOADTHING_APP_ID: process.env.UPLOADTHING_APP_ID,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**
