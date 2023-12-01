@@ -1,8 +1,7 @@
-import { cn } from "~/app/lib/utils";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { getFeedActionColor } from "~/app/helpers/getFeedActionColor";
-import { defaultImage, postFooterAction } from "~/app/lib/data";
 import { MoreHorizontal } from "lucide-react";
+import { cn, getFeedActionColor } from "~/app/lib/utils";
+import { defaultImage, postFooterAction } from "~/app/lib/data";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import type { Images, Post, User } from "@prisma/client";
 import PostImage from "~/app/_components/post/post-image";
 

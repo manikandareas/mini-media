@@ -1,7 +1,7 @@
 import { X } from "lucide-react";
 import Image from "next/image";
 import React from "react";
-import { getRelativeSize } from "~/app/helpers/getRelativeSize";
+import { getRelativeSize } from "~/app/lib/utils";
 
 type Props = {
   previewSource: string[];
