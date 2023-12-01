@@ -9,9 +9,9 @@ import { useSession } from "next-auth/react";
 import PreviewImage from "./preview-image";
 import { api } from "~/trpc/react";
 import toast from "react-hot-toast";
-import { useUploadThing } from "~/app/lib/uploadthing";
+import { useUploadThing } from "~/lib/uploadthing";
 import { useGrowingTextarea } from "~/app/_hooks/useGrowingTextarea";
-import { defaultImage } from "~/app/lib/data";
+import { defaultImage } from "~/lib/data";
 import { setMediaFiles, setStatus } from "~/state/post/postSlice";
 import { useAppDispatch } from "~/state/store";
 import { useInputMedia } from "~/app/_hooks/useInputMedia";
@@ -25,10 +25,10 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "~/app/_components/ui/sheet";
-import { manualSheetClose } from "~/app/lib/utils";
+import { manualSheetClose } from "~/lib/utils";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import { cn } from "../../lib/utils";
+import { cn } from "../../../lib/utils";
 
 /*
  * Form create post

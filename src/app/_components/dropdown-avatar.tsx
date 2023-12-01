@@ -38,7 +38,7 @@ import {
 } from "~/app/_components/ui/dropdown-menu";
 import { ModeToggle } from "./mode-toggle";
 import { signOut, useSession } from "next-auth/react";
-import { defaultImage } from "../lib/data";
+import { defaultImage } from "../../lib/data";
 
 export default function DropdownAvatar() {
   const { data } = useSession();

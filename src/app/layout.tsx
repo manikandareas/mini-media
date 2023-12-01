@@ -2,10 +2,10 @@ import "~/styles/globals.css";
 import { cookies } from "next/headers";
 import { TRPCReactProvider } from "~/trpc/react";
 import { ThemeProvider } from "./_components/theme-provider";
-import { inter } from "./lib/fonts";
+import { inter } from "../lib/fonts";
 import { NextAuthProvider } from "./_components/auth-provider";
 import Header from "./_components/header";
-import { cn } from "./lib/utils";
+import { cn } from "../lib/utils";
 import { Toaster } from "react-hot-toast";
 import ReduxProvider from "./_components/redux-provider";
 

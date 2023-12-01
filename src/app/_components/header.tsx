@@ -1,7 +1,7 @@
 import Link from "next/link";
 import DropdownAvatar from "./dropdown-avatar";
 import { buttonVariants } from "./ui/button";
-import { cn } from "../lib/utils";
+import { cn } from "../../lib/utils";
 import { auth } from "~/auth";
 import LogoHeader from "./logo-header";
 

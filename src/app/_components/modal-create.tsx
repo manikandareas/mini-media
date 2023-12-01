@@ -26,10 +26,10 @@ import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { type ChangeEvent, useEffect, useState } from "react";
 import Image from "next/image";
-import { cn, manualDialogClose } from "../lib/utils";
+import { cn, manualDialogClose } from "../../lib/utils";
 import { api } from "~/trpc/react";
-import { useUploadThing } from "../lib/uploadthing";
-import { FormUploadPostSchema } from "../lib/validators";
+import { useUploadThing } from "../../lib/uploadthing";
+import { FormUploadPostSchema } from "../../lib/validators";
 import type { z } from "zod";
 import Spinner from "./spinner";
 
