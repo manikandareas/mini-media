@@ -38,6 +38,7 @@ export default function Feed() {
             images={post.media}
             post={post.post}
             user={post.author}
+            likes={post.likes}
           />
         ))
       ) : (

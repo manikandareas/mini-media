@@ -17,12 +17,18 @@ export const postRouter = createTRPCRouter({
           include: {
             author: true,
             images: true,
+            Likes: {
+              select: {
+                userId: true,
+              },
+            },
           },
         })
         .then((res) =>
           res.map((post) => ({
             media: post.images,
             author: post.author,
+            likes: post.Likes,
             post: {
               id: post.id,
               status: post.status,
@@ -95,6 +101,44 @@ export const postRouter = createTRPCRouter({
       return {
         post: createdPost,
         media: uploadedMedia,
+      };
+    }),
+
+  toggleLike: privateProcedure
+    .input(
+      z.object({
+        postId: z.number().min(1),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const like = await ctx.db.like.findFirst({
+        where: {
+          userId: ctx.session.user.id,
+          postId: input.postId,
+        },
+      });
+
+      if (!like) {
+        await ctx.db.like.create({
+          data: {
+            userId: ctx.session.user.id,
+            postId: input.postId,
+          },
+        });
+
+        return {
+          action: "like",
+        };
+      }
+
+      await ctx.db.like.delete({
+        where: {
+          id: like?.id,
+        },
+      });
+
+      return {
+        action: "unlike",
       };
     }),
 });

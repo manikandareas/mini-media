@@ -1,17 +1,48 @@
+"use client";
 import { MoreHorizontal } from "lucide-react";
 import { cn, getFeedActionColor } from "~/lib/utils";
 import { defaultImage, postFooterAction } from "~/lib/data";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import type { Images, Post, User } from "@prisma/client";
+import type { Images, Like, Post, User } from "@prisma/client";
 import PostImage from "~/app/_components/post/post-image";
+import { api } from "~/trpc/react";
+import { useEffect, useState } from "react";
 
 type Props = {
   user: User;
   post: Post;
+  likes: Pick<Like, "userId">[];
   images: Images[];
 };
 
-export default function Post({ images, post, user }: Props) {
+export default function Post({ images, post, user, likes }: Props) {
+  const { mutate } = api.post.toggleLike.useMutation({
+    onSuccess: async () => {
+      await apiCtx.post.getAll.invalidate();
+    },
+  });
+
+  const [postLikes, setPostLikes] = useState<number>(likes.length);
+  const [isAlreadyLike, setIsAlreadyLike] = useState<boolean>(false);
+
+  const apiCtx = api.useUtils();
+
+  const handleToggleLike = () => {
+    if (isAlreadyLike) {
+      setPostLikes(postLikes - 1);
+      setIsAlreadyLike(false);
+    } else {
+      setIsAlreadyLike(true);
+      setPostLikes(postLikes + 1);
+    }
+
+    mutate({ postId: post.id });
+  };
+
+  useEffect(() => {
+    setIsAlreadyLike(likes.some((like) => like.userId === user.id));
+  }, []);
+
   return (
     <article className="flex h-fit flex-col gap-4  border p-4">
       <header className="flex w-full items-center justify-between">
@@ -41,6 +72,7 @@ export default function Post({ images, post, user }: Props) {
               <li
                 key={index}
                 className="group flex cursor-pointer items-center "
+                onClick={index === 3 ? handleToggleLike : () => null}
               >
                 <i
                   className={cn(
@@ -48,11 +80,16 @@ export default function Post({ images, post, user }: Props) {
                     getFeedActionColor(item.color)?.icon,
                   )}
                 >
-                  <item.icon size={21} />
+                  <item.icon
+                    size={21}
+                    className={cn({
+                      "text-rose-500": index === 3 && isAlreadyLike,
+                    })}
+                  />
                 </i>
                 {item.value ? (
                   <small className={cn(getFeedActionColor(item.color)?.text)}>
-                    {item.value}
+                    {index === 3 ? postLikes + 1000 : item.value}
                   </small>
                 ) : null}
               </li>
