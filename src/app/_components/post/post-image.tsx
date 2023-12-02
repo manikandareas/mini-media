@@ -32,9 +32,9 @@ export default function PostImage({ images }: Props) {
                 alt="image"
                 className="max-w-[calc(100%/2-4px)] rounded-lg object-cover"
                 quality={100}
-                loading="lazy"
                 width={283}
                 height={283}
+                loading="lazy"
               />
             ))
           : images.length === 3

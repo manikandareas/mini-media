@@ -4,7 +4,6 @@ import { Textarea } from "../ui/textarea";
 import { Separator } from "../ui/separator";
 import { Button } from "../ui/button";
 import { Loader2, Cat, ImageIcon, ScanSearch } from "lucide-react";
-
 import { useSession } from "next-auth/react";
 import PreviewImage from "./preview-image";
 import { api } from "~/trpc/react";
@@ -15,7 +14,7 @@ import { defaultImage } from "~/lib/data";
 import { setMediaFiles, setStatus } from "~/state/post/postSlice";
 import { useAppDispatch } from "~/state/store";
 import { useInputMedia } from "~/app/_hooks/useInputMedia";
-import type { PropsWithChildren, ChangeEvent } from "react";
+import { type PropsWithChildren, type ChangeEvent } from "react";
 import {
   Sheet,
   SheetClose,
@@ -202,7 +201,6 @@ export function PopupCreatePost({ children }: PopupCreatePostProps) {
             return formattedMedia ?? [];
           })
         : [];
-
       await mutateAsync({
         status: statusValue,
         media,

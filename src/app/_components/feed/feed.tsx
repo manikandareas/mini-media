@@ -9,7 +9,6 @@ import { useSession } from "next-auth/react";
 
 export default function Feed() {
   const { data, isLoading } = api.post.getAll.useQuery();
-
   const { status: isUserSignedIn } = useSession();
 
   if (!data || isLoading) {

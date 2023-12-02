@@ -52,6 +52,7 @@ export default function DropdownAvatar() {
       <DropdownMenuTrigger asChild>
         <Avatar className="h-8 w-8 hover:cursor-pointer md:h-10 md:w-10">
           <AvatarImage
+            fetchPriority="high"
             src={data?.user.image ?? defaultImage(data?.user.name)}
           />
           <AvatarFallback>{"Avatar"}</AvatarFallback>

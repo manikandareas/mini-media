@@ -121,7 +121,7 @@ model Like {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    @@index([userId])
+    @@unique([userId, postId])
     @@index([postId])
 }
 
