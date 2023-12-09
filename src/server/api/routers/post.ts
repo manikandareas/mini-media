@@ -13,6 +13,7 @@ export const postRouter = createTRPCRouter({
     try {
       const posts = await ctx.db.post
         .findMany({
+          take: 10,
           orderBy: { createdAt: "desc" },
           include: {
             author: true,

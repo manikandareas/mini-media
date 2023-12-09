@@ -1,15 +1,16 @@
 "use client";
-import Post from "~/app/_components/post/post";
+import Post from "~/app/_components/post";
 import { api } from "~/trpc/react";
-import FeedLoading from "./feed-loading";
-import FormCreatePost from "../form/form-create-post";
+import FormCreatePost from "../form-create-post";
 import { Banana } from "lucide-react";
 import { Button } from "../ui/button";
 import { useSession } from "next-auth/react";
+import FeedLoading from "./feed-loading";
+import { FormCreatePostPopup } from "../form-create-post/popup";
 
 export default function Feed() {
   const { data, isLoading } = api.post.getAll.useQuery();
-  const { status: isUserSignedIn } = useSession();
+  const { status: statusAuthorizationUser } = useSession();
 
   if (!data || isLoading) {
     return <FeedLoading />;
@@ -17,17 +18,17 @@ export default function Feed() {
 
   return (
     <section className=" relative flex min-h-screen w-full max-w-[37.5rem] flex-col">
-      {isUserSignedIn === "authenticated" ? (
+      {statusAuthorizationUser === "authenticated" ? (
         <>
           <FormCreatePost />
-          <FormCreatePost.Popup>
+          <FormCreatePostPopup>
             <Button
               size={"icon"}
               className="fixed bottom-4 right-4 z-50 rounded-full md:hidden"
             >
               <Banana />
             </Button>
-          </FormCreatePost.Popup>
+          </FormCreatePostPopup>
         </>
       ) : null}
       {data.length > 0 ? (

@@ -1,26 +1,35 @@
 "use client";
-import { MoreHorizontal } from "lucide-react";
-import { cn, getFeedActionColor } from "~/lib/utils";
-import { defaultImage, postFooterAction } from "~/lib/data";
+import { Info, MoreHorizontal } from "lucide-react";
+import {
+  alreadyLikeChecker,
+  cn,
+  getFeedActionColor,
+  defaultImage,
+  postFooterAction,
+} from "~/lib";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import type { Images, Like, Post, User } from "@prisma/client";
 import PostImage from "~/app/_components/post/post-image";
 import { api } from "~/trpc/react";
 import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import toast from "react-hot-toast";
 
-type Props = {
+type PostProps = {
   user: User;
   post: Post;
   likes: Pick<Like, "userId">[];
   images: Images[];
 };
 
-export default function Post({ images, post, user, likes }: Props) {
+export default function Post({ images, post, user, likes }: PostProps) {
   const { mutate } = api.post.toggleLike.useMutation({
     onSuccess: async () => {
       await apiCtx.post.getAll.invalidate();
     },
   });
+
+  const { status } = useSession();
 
   const [postLikes, setPostLikes] = useState<number>(likes.length);
   const [isAlreadyLike, setIsAlreadyLike] = useState<boolean>(false);
@@ -28,20 +37,28 @@ export default function Post({ images, post, user, likes }: Props) {
   const apiCtx = api.useUtils();
 
   const handleToggleLike = () => {
-    if (isAlreadyLike) {
-      setPostLikes(postLikes - 1);
-      setIsAlreadyLike(false);
-    } else {
-      setIsAlreadyLike(true);
-      setPostLikes(postLikes + 1);
-    }
+    if (status === "authenticated") {
+      if (isAlreadyLike) {
+        setPostLikes(postLikes - 1);
+        setIsAlreadyLike(false);
+      } else {
+        setIsAlreadyLike(true);
+        setPostLikes(postLikes + 1);
+      }
 
-    mutate({ postId: post.id });
+      mutate({ postId: post.id });
+    } else {
+      toast.error("Upps you need to login", {
+        position: "bottom-right",
+        duration: 5000,
+        icon: <Info />,
+      });
+    }
   };
 
   useEffect(() => {
-    setIsAlreadyLike(likes.some((like) => like.userId === user.id));
-  }, []);
+    setIsAlreadyLike(alreadyLikeChecker(likes, user.id));
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <article className="flex h-fit flex-col gap-4  border p-4">

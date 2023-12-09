@@ -1,3 +1,4 @@
+import type { Like } from "@prisma/client";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -72,4 +73,11 @@ export const getRelativeSize = (indexLength: number) => {
 
 export const extractTagsFromStatus = (status: string) => {
   return status.match(/#\S+/g);
+};
+
+export const alreadyLikeChecker = (
+  likes: Pick<Like, "userId">[],
+  userId: string,
+) => {
+  return likes.some((like) => like.userId === userId);
 };
