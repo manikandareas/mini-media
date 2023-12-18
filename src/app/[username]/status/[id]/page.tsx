@@ -1,5 +1,5 @@
 import React from "react";
-import FeedAside from "~/app/_components/feed/feed-aside";
+import FeedAside from "~/app/_components/feed/FeedAside";
 
 export default function DetailsPostPage({
   params,

@@ -1,5 +1,5 @@
-import Counter from "../_components/counter";
-import FeedAside from "../_components/feed/feed-aside";
+import Counter from "../_components/Counter";
+import FeedAside from "../_components/feed/FeedAside";
 
 export default function ProfilePage({
   params,

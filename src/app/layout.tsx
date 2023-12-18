@@ -1,13 +1,13 @@
 import "~/styles/globals.css";
 import { cookies } from "next/headers";
 import { TRPCReactProvider } from "~/trpc/react";
-import { ThemeProvider } from "./_components/theme-provider";
-import { inter } from "../lib/fonts";
-import { NextAuthProvider } from "./_components/auth-provider";
-import Header from "./_components/header";
-import { cn } from "../lib/utils";
+import { ThemeProvider } from "./_components/ThemeProvider";
+import { inter } from "../common/lib/fonts";
+import { NextAuthProvider } from "./_components/AuthProvider";
+import { cn } from "../common/lib/utils";
 import { Toaster } from "react-hot-toast";
-import ReduxProvider from "./_components/redux-provider";
+import ReduxProvider from "./_components/ReduxProvider";
+import Layout from "./_components/layout";
 
 export const metadata = {
   title: "Create T3 App",
@@ -31,10 +31,7 @@ export default function RootLayout({
                 enableSystem
                 disableTransitionOnChange
               >
-                <Header />
-                <main className="relative mx-auto flex max-w-6xl justify-center ">
-                  {children}
-                </main>
+                <Layout>{children}</Layout>
                 <Toaster />
               </ThemeProvider>
             </ReduxProvider>

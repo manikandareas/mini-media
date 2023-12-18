@@ -2,7 +2,7 @@ import { useSession } from "next-auth/react";
 import type { PropsWithChildren } from "react";
 import { useGrowingTextarea } from "~/app/_hooks/useGrowingTextarea";
 import { useInputMedia } from "~/app/_hooks/useInputMedia";
-import { defaultImage, useUploadThing } from "~/lib";
+import { defaultImage, manualSheetClose, useUploadThing } from "~/common/lib";
 import { setMediaFiles, setStatus } from "~/state/post/postSlice";
 import { useAppDispatch } from "~/state/store";
 import {
@@ -16,11 +16,13 @@ import {
 } from "../ui/sheet";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Textarea } from "../ui/textarea";
-import PreviewImage from "./preview-image";
-import RibbonMenu from "./ribbon-menu";
+import PreviewImage from "./FormPreviewImage";
+import RibbonMenu from "./FormRibbonMenu";
 import { Button } from "../ui/button";
 import { Loader2 } from "lucide-react";
-import useSubmitPost from "./useSubmitPost";
+import { api } from "~/trpc/react";
+import toast from "react-hot-toast";
+import { ZodError } from "zod";
 
 type FormCreatePostPopupProps = PropsWithChildren;
 export function FormCreatePostPopup({ children }: FormCreatePostPopupProps) {
@@ -31,11 +33,36 @@ export function FormCreatePostPopup({ children }: FormCreatePostPopupProps) {
   const dispatch = useAppDispatch();
 
   const user = useSession().data?.user;
-
+  const apiCtx = api.useUtils();
   const { mutateAsync, isLoading: submittingPostIsLoading } =
-    useSubmitPost.usePopup({
-      resetStatusValue: dispatch(setStatus),
-      resetMediaFilesValue: dispatch(setMediaFiles),
+    api.post.create.useMutation({
+      onSettled: () => {
+        dispatch(setMediaFiles([]));
+        dispatch(setStatus(""));
+        manualSheetClose();
+      },
+
+      onSuccess: async () => {
+        toast.success("Successfully created post!", {
+          position: "bottom-center",
+          duration: 5000,
+        });
+
+        await apiCtx.post.getAll.invalidate();
+      },
+      onError: (error) => {
+        if (error instanceof ZodError) {
+          toast.error(error.message, {
+            position: "bottom-right",
+            duration: 5000,
+          });
+        } else {
+          toast.error("Oops weird thing happened, try again later", {
+            position: "bottom-right",
+            duration: 5000,
+          });
+        }
+      },
     });
 
   const { startUpload, isUploading: uploadingImageIsLoading } =

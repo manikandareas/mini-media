@@ -2,7 +2,7 @@ import type { NextAuthConfig } from "next-auth";
 import NextAuth from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import GitHub from "next-auth/providers/github";
-import { db } from "./server/db";
+import { db } from "./db";
 
 export const authConfig = {
   providers: [GitHub],

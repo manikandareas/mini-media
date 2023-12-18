@@ -1,7 +1,7 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
-import { extractTagsFromStatus } from "~/lib/utils";
-import { imageSchema } from "~/lib/validators";
+import { extractTagsFromStatus } from "~/common/lib/utils";
+import { imageSchema } from "~/common/lib/validators";
 import {
   createTRPCRouter,
   privateProcedure,

@@ -5,8 +5,8 @@ import FormCreatePost from "../form-create-post";
 import { Banana } from "lucide-react";
 import { Button } from "../ui/button";
 import { useSession } from "next-auth/react";
-import FeedLoading from "./feed-loading";
-import { FormCreatePostPopup } from "../form-create-post/popup";
+import FeedLoading from "./FeedLoading";
+import { FormCreatePostPopup } from "../form-create-post/FormPopup";
 
 export default function Feed() {
   const { data, isLoading } = api.post.getAll.useQuery();

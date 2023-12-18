@@ -1,6 +1,6 @@
 import { Label } from "../ui/label";
-import { cn } from "~/lib";
-import { Cat, ImageIcon, ScanSearch } from "lucide-react";
+import { cn } from "~/common/lib";
+import { ImageIcon } from "lucide-react";
 import { Input } from "../ui/input";
 import { useInputMedia } from "~/app/_hooks/useInputMedia";
 
@@ -31,21 +31,6 @@ export default function RibbonMenu() {
           disabled={mediaFiles.length === 4}
         />
       </Label>
-      <div
-        title="Unsplash"
-        className="cursor-pointer rounded-full p-1.5 text-blue-600 hover:bg-blue-600/10"
-      >
-        <ScanSearch size={18} />
-      </div>
-      <div
-        title="Gif"
-        className={cn(
-          "cursor-pointer rounded-full p-1.5 text-blue-600 hover:bg-blue-600/10",
-          { "text-slate-500": mediaFiles.length > 0 },
-        )}
-      >
-        <Cat size={18} />
-      </div>
     </div>
   );
 }

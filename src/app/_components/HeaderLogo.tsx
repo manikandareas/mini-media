@@ -2,8 +2,8 @@
 
 import { useTheme } from "next-themes";
 import Link from "next/link";
-import MadiaLogo from "~/assets/icon/madia-logo";
-import MadiaMonochromeIcon from "~/assets/icon/madia-monocrome";
+import MadiaLogo from "~/common/assets/icon/madia-logo";
+import MadiaMonochromeIcon from "~/common/assets/icon/madia-monocrome";
 
 export default function LogoHeader() {
   const { theme } = useTheme();

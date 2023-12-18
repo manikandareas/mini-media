@@ -6,13 +6,15 @@ import { Button } from "../ui/button";
 import { Loader2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useGrowingTextarea } from "~/app/_hooks/useGrowingTextarea";
-import { defaultImage, useUploadThing } from "~/lib";
+import { defaultImage, useUploadThing } from "~/common/lib";
 import { setMediaFiles, setStatus } from "~/state/post/postSlice";
 import { useAppDispatch } from "~/state/store";
 import { useInputMedia } from "~/app/_hooks/useInputMedia";
-import PreviewImage from "./preview-image";
-import RibbonMenu from "./ribbon-menu";
-import useSubmitPost from "./useSubmitPost";
+import PreviewImage from "./FormPreviewImage";
+import RibbonMenu from "./FormRibbonMenu";
+import { api } from "~/trpc/react";
+import toast from "react-hot-toast";
+import { ZodError } from "zod";
 
 export default function FormCreatePost() {
   const { textAreaRef, statusValue } = useGrowingTextarea();
@@ -22,10 +24,39 @@ export default function FormCreatePost() {
 
   const dispatch = useAppDispatch();
 
-  const { mutateAsync, isLoading: submittingPostIsLoading } = useSubmitPost({
-    resetStatusValue: dispatch(setStatus),
-    resetMediaFilesValue: dispatch(setMediaFiles),
-  });
+  // const { mutateAsync, isLoading: submittingPostIsLoading } = useSubmitPost({
+  //   resetStatusValue: dispatch(setStatus),
+  //   resetMediaFilesValue: dispatch(setMediaFiles),
+  // });
+  const apiCtx = api.useUtils();
+  const { mutateAsync, isLoading: submittingPostIsLoading } =
+    api.post.create.useMutation({
+      onSettled: () => {
+        dispatch(setMediaFiles([]));
+        dispatch(setStatus(""));
+      },
+      onSuccess: async () => {
+        toast.success("Congratulations your post has been published", {
+          position: "bottom-right",
+          duration: 5000,
+        });
+
+        await apiCtx.post.getAll.invalidate();
+      },
+      onError: (error) => {
+        if (error instanceof ZodError) {
+          toast.error(error.message, {
+            position: "bottom-right",
+            duration: 5000,
+          });
+        } else {
+          toast.error("Oops weird thing happened, try again later", {
+            position: "bottom-right",
+            duration: 5000,
+          });
+        }
+      },
+    });
 
   const { startUpload, isUploading: uploadingImageIsLoading } =
     useUploadThing("imageUploader");
@@ -69,7 +100,7 @@ export default function FormCreatePost() {
           <Textarea
             ref={textAreaRef}
             onChange={(e) => dispatch(setStatus(e.target.value))}
-            className="w-full resize-none overflow-hidden border-none text-lg  focus:border-none focus:outline-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-transparent active:border-none active:outline-none"
+            className="w-full resize-none overflow-hidden border-none  bg-transparent text-lg ring-0 ring-transparent focus:border-none focus:outline-none focus:ring-0  focus-visible:border-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-transparent active:border-none active:outline-none active:ring-0"
             rows={1}
             value={statusValue}
             placeholder="What's on your mind?"

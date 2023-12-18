@@ -26,12 +26,12 @@ import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { type ChangeEvent, useEffect, useState } from "react";
 import Image from "next/image";
-import { cn, manualDialogClose } from "../../lib/utils";
+import { cn, manualDialogClose } from "../../common/lib/utils";
 import { api } from "~/trpc/react";
-import { useUploadThing } from "../../lib/uploadthing";
-import { FormUploadPostSchema } from "../../lib/validators";
+import { useUploadThing } from "../../common/lib/uploadthing";
+import { FormUploadPostSchema } from "../../common/lib/validators";
 import type { z } from "zod";
-import Spinner from "./spinner";
+import Spinner from "./Spinner";
 
 export function ModalCreate() {
   const [inputMedia, setInputMedia] = useState<(Blob | MediaSource)[]>([]);

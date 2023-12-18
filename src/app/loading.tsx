@@ -1,4 +1,4 @@
-import FeedLoading from "./_components/feed/feed-loading";
+import FeedLoading from "./_components/feed/FeedLoading";
 
 export default function Loading() {
   return <FeedLoading />;

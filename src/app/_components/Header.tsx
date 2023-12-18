@@ -1,9 +1,9 @@
 import Link from "next/link";
-import DropdownAvatar from "./dropdown-avatar";
+import DropdownAvatar from "./DropdownAvatar";
 import { buttonVariants } from "./ui/button";
-import { cn } from "../../lib/utils";
-import { auth } from "~/auth";
-import LogoHeader from "./logo-header";
+import { cn } from "../../common/lib/utils";
+import { auth } from "~/server/auth";
+import LogoHeader from "./HeaderLogo";
 
 export default async function Header() {
   const data = await auth();

@@ -5,15 +5,15 @@ import {
   cn,
   getFeedActionColor,
   defaultImage,
-  postFooterAction,
-} from "~/lib";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+} from "~/common/lib";
+import { postFooterAction } from "~/common/constant/post";
 import type { Images, Like, Post, User } from "@prisma/client";
-import PostImage from "~/app/_components/post/post-image";
+import PostImage from "~/app/_components/post/PostImage";
 import { api } from "~/trpc/react";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import toast from "react-hot-toast";
+import { Avatar } from "~/common/component/avatar";
 
 type PostProps = {
   user: User;
@@ -64,10 +64,12 @@ export default function Post({ images, post, user, likes }: PostProps) {
     <article className="flex h-fit flex-col gap-4  border p-4">
       <header className="flex w-full items-center justify-between">
         <div className="flex items-center gap-2">
-          <Avatar className="h-8 w-8 hover:cursor-pointer md:h-10 md:w-10">
-            <AvatarImage src={user.image ?? defaultImage(user.name)} />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
+          <Avatar
+            src={user.image ?? defaultImage(user.name)}
+            alt={user.name ?? ""}
+            size={"sm"}
+            fallback={user.name ?? ""}
+          />
 
           <div className="leading-5">
             <h1>{user.name}</h1>
@@ -89,7 +91,7 @@ export default function Post({ images, post, user, likes }: PostProps) {
               <li
                 key={index}
                 className="group flex cursor-pointer items-center "
-                onClick={index === 3 ? handleToggleLike : () => null}
+                onClick={handleToggleLike}
               >
                 <i
                   className={cn(
@@ -100,13 +102,17 @@ export default function Post({ images, post, user, likes }: PostProps) {
                   <item.icon
                     size={21}
                     className={cn({
-                      "text-rose-500": index === 3 && isAlreadyLike,
+                      "text-rose-500": isAlreadyLike,
                     })}
                   />
                 </i>
                 {item.value ? (
-                  <small className={cn(getFeedActionColor(item.color)?.text)}>
-                    {index === 3 ? postLikes + 1000 : item.value}
+                  <small
+                    className={cn(getFeedActionColor(item.color)?.text, {
+                      "text-rose-500": isAlreadyLike,
+                    })}
+                  >
+                    {postLikes + 1000}
                   </small>
                 ) : null}
               </li>
